@@ -23,9 +23,9 @@ public class ItemController : MonoBehaviour
     {
         while (true)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y - (gravity), 0);
-            yield return new WaitForSeconds(0.01f);
+            transform.position = new Vector3(transform.position.x, transform.position.y - (gravity/2), 0);
+            yield return new WaitForSeconds(0.001f);
         }
-
+        
     }
 }

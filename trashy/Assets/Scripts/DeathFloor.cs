@@ -31,7 +31,6 @@ public class DeathFloor : MonoBehaviour
             if (bin == "Compost" || bin == "Recycling")
             {
                 gameManager.GetComponent<Trash>().endGame();
-                Destroy(this);
             }
             else if (bin == "Trash")
             {

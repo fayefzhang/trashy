@@ -67,13 +67,9 @@ public class PlayerControl : MonoBehaviour
                 }
                 else
                 {   //It's a tap as the drag distance is less than 20% of the screen height
-                    //Debug.Log("Tap");
-                    print("tap at : (" + lp.x + ", " + lp.y + ")");
-
-                    if (gameObject.GetComponent<Trash>().enabled)
-                        gameObject.GetComponent<Trash>().tap(lp.x, lp.y);
-                    else
-                        gameObject.GetComponent<GameManager>().tap();
+                    //print("tap at : (" + lp.x + ", " + lp.y + ")");
+                    
+                    gameObject.GetComponent<GameManager>().tap();
                 }
             }
         }

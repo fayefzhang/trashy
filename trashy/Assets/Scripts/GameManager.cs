@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject CBOISilh;
 
     private bool tapped = false;
+    private string btn = "";
 
     // Start is called before the first frame update
     void Start()
@@ -34,9 +35,6 @@ public class GameManager : MonoBehaviour
         cutscene.SetActive(false);
         main.SetActive(false);
         sort.SetActive(false);
-
-        //gameObject.GetComponent<Trash>().enabled = true;
-        //sort.SetActive(true);
 
         if (!debugSkip)
         {
@@ -47,6 +45,8 @@ public class GameManager : MonoBehaviour
 
                 cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
                 cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
+                CBOISilh.GetComponent<SpriteRenderer>().flipX = true;
+                CBOISilh.transform.position = new Vector3(133.67f, CBOISilh.transform.position.y, CBOISilh.transform.position.z);
                 cutsceneChar.transform.position = new Vector3(-30.5f, -145.2f, 0f);
             }
             else
@@ -60,7 +60,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        StartCoroutine(introduction());
+        gameObject.GetComponent<Trash>().enabled = true;
+        sort.SetActive(true);
+
+        //StartCoroutine(introduction());
     }
 
     // Update is called once per frame
@@ -89,6 +92,7 @@ public class GameManager : MonoBehaviour
         cutsceneChar.transform.localScale = new Vector3(17f, 17f, 0f);
         mainBg.transform.position = new Vector3(768.5f, mainBg.transform.position.y, mainBg.transform.position.z);
         cutsceneChar.GetComponent<SpriteRenderer>().flipX = false;
+        CBOISilh.GetComponent<SpriteRenderer>().flipX = false;
 
         cutsceneCharName.enabled = true;
         cutsceneCharName.GetComponent<Text>().color = new Color(1f, 1f, 1f, 0f);
@@ -230,6 +234,8 @@ public class GameManager : MonoBehaviour
         }
 
         cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
+        CBOISilh.GetComponent<SpriteRenderer>().flipX = true;
+        CBOISilh.transform.position = new Vector3(133.67f, CBOISilh.transform.position.y, CBOISilh.transform.position.z);
 
         yield return new WaitForSeconds(0.2f);
 
@@ -241,11 +247,12 @@ public class GameManager : MonoBehaviour
         mapSilh.SetActive(true);
         mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, 0f);
 
+        //continue after map is pressed
         bool positive = false;
         //is false when number going up
         //is true when number going down
-        tapped = false;
-        while (!tapped)
+        btn = "";
+        while (!(btn == "Map"))
         {
             if (positive && mapSilh.GetComponent<SpriteRenderer>().color.a < 0.4f)
             {
@@ -275,9 +282,10 @@ public class GameManager : MonoBehaviour
         guideSilh.SetActive(true);
         guideSilh.GetComponent<SpriteRenderer>().color = new Color(guideSilh.GetComponent<SpriteRenderer>().color.r, guideSilh.GetComponent<SpriteRenderer>().color.g, guideSilh.GetComponent<SpriteRenderer>().color.b, 0f);
 
+        //continue after guide is pressed
         positive = false;
-        tapped = false;
-        while (!tapped)
+        btn = "";
+        while (!(btn == "Guide"))
         {
             if (positive && guideSilh.GetComponent<SpriteRenderer>().color.a < 0.4f)
             {
@@ -303,13 +311,13 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        //sort (cboi)
+        //continue after upgrades (cboi) is pressed
         CBOISilh.SetActive(true);
         CBOISilh.GetComponent<SpriteRenderer>().color = new Color(CBOISilh.GetComponent<SpriteRenderer>().color.r, CBOISilh.GetComponent<SpriteRenderer>().color.g, CBOISilh.GetComponent<SpriteRenderer>().color.b, 0f);
 
         positive = false;
-        tapped = false;
-        while (!tapped)
+        btn = "";
+        while (!(btn == "CBOI"))
         {
             if (positive && CBOISilh.GetComponent<SpriteRenderer>().color.a < 0.4f)
             {
@@ -333,9 +341,8 @@ public class GameManager : MonoBehaviour
         CBOISilh.GetComponent<SpriteRenderer>().color = new Color(CBOISilh.GetComponent<SpriteRenderer>().color.r, CBOISilh.GetComponent<SpriteRenderer>().color.g, CBOISilh.GetComponent<SpriteRenderer>().color.b, 0f);
         CBOISilh.SetActive(false);
 
-        yield return new WaitForSeconds(1f);
-
         tapped = false;
+        btn = "";
 
         yield return null;
     }
@@ -343,5 +350,10 @@ public class GameManager : MonoBehaviour
     public void tap()
     {
         tapped = true;
+    }
+
+    public void button(string btn)
+    {
+        this.btn = btn;
     }
 }

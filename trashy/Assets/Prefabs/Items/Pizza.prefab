@@ -142,4 +142,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info: {fileID: 11400000, guid: 0f8c6efca4910c14f842866af32b1eb8, type: 2}
-  gravity: 3
+  gravity: 5

@@ -22,8 +22,8 @@ public class Trash : MonoBehaviour
     public GameObject cbin;
 
     [Header("Arrows")]
-    public GameObject rArrow;
-    public GameObject lArrow;
+    public Button rArrow;
+    public Button lArrow;
 
     [Header("Properties")]
     public float spacermin = 1f;
@@ -52,8 +52,8 @@ public class Trash : MonoBehaviour
         items[2] = rec1;
 
         StartCoroutine(SpawnTrash());
-        lArrow.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 1f, 1f); //left is blue
-        rArrow.GetComponent<SpriteRenderer>().color = new Color(0.5f, 1f, 0.5f, 1f); //right is green
+        lArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 1f, 1f); //left is blue
+        rArrow.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); //right is green
     }
 
     // Update is called once per frame
@@ -97,17 +97,11 @@ public class Trash : MonoBehaviour
     public void swipeRight()
     {
         if (rbin.activeSelf)
-        {
             StartCoroutine(exchangeBin(rbin, cbin, false));
-        }
         else if (cbin.activeSelf)
-        {
             StartCoroutine(exchangeBin(cbin, tbin, false));
-        }
         else
-        {
             StartCoroutine(exchangeBin(tbin, rbin, false));
-        }
     }
 
     public void swipeLeft()
@@ -118,14 +112,6 @@ public class Trash : MonoBehaviour
             StartCoroutine(exchangeBin(tbin, cbin, true));
         else
             StartCoroutine(exchangeBin(cbin, rbin, true));
-    }
-
-    public void tap(float x, float y)
-    {
-        if (x > 75 && x < 155 && y > 70 && y < 161)
-            swipeRight();
-        else if (x > 570 && x < 650 && y > 70 && y < 161)
-            swipeLeft();
     }
 
     IEnumerator exchangeBin(GameObject binOff, GameObject binOn, bool isLeft)
@@ -176,18 +162,18 @@ public class Trash : MonoBehaviour
 
         if (rbin.activeSelf)
         {
-            lArrow.GetComponent<SpriteRenderer>().color = new Color(0.5f, 1f, 0.5f, 1f); //left is green
-            rArrow.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 1f); //right is black
+            lArrow.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); //left is green
+            rArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1f); //right is black
         }
         else if (cbin.activeSelf)
         {
-            lArrow.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 1f); //left is black
-            rArrow.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 1f, 1f); //right is blue
+            lArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1f); //left is black
+            rArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 1f, 1f); //right is blue
         }
         else
         {
-            lArrow.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 1f, 1f); //left is blue
-            rArrow.GetComponent<SpriteRenderer>().color = new Color(0.5f, 1f, 0.5f, 1f); //right is green
+            lArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 1f, 1f); //left is blue
+            rArrow.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); //right is green
         }
         yield return null;
     }
