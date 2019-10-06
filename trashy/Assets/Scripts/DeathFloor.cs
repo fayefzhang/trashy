@@ -22,27 +22,29 @@ public class DeathFloor : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<ItemController>().info.type == bin)
+        if (gameManager.GetComponent<Trash>().gameState() == "sorting")
         {
-            gameManager.GetComponent<Trash>().score += 20;
-        }
-        else
-        {
-            if (bin == "Compost" || bin == "Recycling")
+            if (collision.gameObject.GetComponent<ItemController>().info.type == bin)
             {
-                gameManager.GetComponent<Trash>().endGame();
-            }
-            else if (bin == "Trash")
-            {
-                gameManager.GetComponent<Trash>().score -= 5;
+                gameManager.GetComponent<Trash>().score += 20;
             }
             else
             {
-                Debug.Log("u named something wrong, check if 'recycling' is named correctly dude");
+                if (bin == "Compost" || bin == "Recycling")
+                {
+                    gameManager.GetComponent<Trash>().endGame();
+                }
+                else if (bin == "Trash")
+                {
+                    gameManager.GetComponent<Trash>().score -= 5;
+                }
+                else
+                {
+                    Debug.Log("u named something wrong, check if 'recycling' is named correctly dude");
+                }
             }
         }
-
-        //print("TRASHED " + collision.gameObject.name);
-        Destroy(collision.gameObject, 0.5f);
+        
+            Destroy(collision.gameObject, 0.5f);
     }
 }

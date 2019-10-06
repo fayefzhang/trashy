@@ -94,6 +94,16 @@ public class Trash : MonoBehaviour
         }
     }
 
+    public string gameState()
+    {
+        if (state == State.Asleep)
+            return "asleep";
+        else if (state == State.Sorting)
+            return "sorting";
+        else
+            return "ended";
+    }
+
     public void swipeRight()
     {
         if (rbin.activeSelf)

@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject guideSilh;
     [SerializeField] GameObject mapSilh;
     [SerializeField] GameObject CBOISilh;
+    [SerializeField] GameObject TrashSilh;
 
     private bool tapped = false;
     private string btn = "";
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour
                 cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
                 cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
                 CBOISilh.GetComponent<SpriteRenderer>().flipX = true;
-                CBOISilh.transform.position = new Vector3(133.67f, CBOISilh.transform.position.y, CBOISilh.transform.position.z);
+                CBOISilh.transform.position = new Vector3(135.67f, CBOISilh.transform.position.y, CBOISilh.transform.position.z);
                 cutsceneChar.transform.position = new Vector3(-30.5f, -145.2f, 0f);
             }
             else
@@ -60,10 +61,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        gameObject.GetComponent<Trash>().enabled = true;
-        sort.SetActive(true);
+        //gameObject.GetComponent<Trash>().enabled = true;
+        //sort.SetActive(true);
 
-        //StartCoroutine(introduction());
+        StartCoroutine(introduction());
     }
 
     // Update is called once per frame
@@ -85,6 +86,7 @@ public class GameManager : MonoBehaviour
         mapSilh.SetActive(false);
         guideSilh.SetActive(false);
         CBOISilh.SetActive(false);
+        TrashSilh.SetActive(false);
 
         yield return new WaitForSeconds(1f);
 
@@ -202,6 +204,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
+        tapped = false;
         while (!tapped)
         {
             yield return new WaitForSeconds(0.1f);
@@ -235,7 +238,7 @@ public class GameManager : MonoBehaviour
 
         cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
         CBOISilh.GetComponent<SpriteRenderer>().flipX = true;
-        CBOISilh.transform.position = new Vector3(133.67f, CBOISilh.transform.position.y, CBOISilh.transform.position.z);
+        CBOISilh.transform.position = new Vector3(135.67f, CBOISilh.transform.position.y, CBOISilh.transform.position.z);
 
         yield return new WaitForSeconds(0.2f);
 
@@ -311,7 +314,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        //continue after upgrades (cboi) is pressed
+        //continue after introduction is pressed
         CBOISilh.SetActive(true);
         CBOISilh.GetComponent<SpriteRenderer>().color = new Color(CBOISilh.GetComponent<SpriteRenderer>().color.r, CBOISilh.GetComponent<SpriteRenderer>().color.g, CBOISilh.GetComponent<SpriteRenderer>().color.b, 0f);
 
@@ -341,6 +344,46 @@ public class GameManager : MonoBehaviour
         CBOISilh.GetComponent<SpriteRenderer>().color = new Color(CBOISilh.GetComponent<SpriteRenderer>().color.r, CBOISilh.GetComponent<SpriteRenderer>().color.g, CBOISilh.GetComponent<SpriteRenderer>().color.b, 0f);
         CBOISilh.SetActive(false);
 
+        yield return new WaitForSeconds(1f);
+
+        //continue after upgrades (cboi) is pressed
+        TrashSilh.SetActive(true);
+        TrashSilh.GetComponent<SpriteRenderer>().color = new Color(TrashSilh.GetComponent<SpriteRenderer>().color.r, TrashSilh.GetComponent<SpriteRenderer>().color.g, TrashSilh.GetComponent<SpriteRenderer>().color.b, 0f);
+
+        positive = false;
+        btn = "";
+        while (!(btn == "Trash"))
+        {
+            if (positive && TrashSilh.GetComponent<SpriteRenderer>().color.a < 0.4f)
+            {
+                TrashSilh.GetComponent<SpriteRenderer>().color = new Color(TrashSilh.GetComponent<SpriteRenderer>().color.r, TrashSilh.GetComponent<SpriteRenderer>().color.g, TrashSilh.GetComponent<SpriteRenderer>().color.b, TrashSilh.GetComponent<SpriteRenderer>().color.a + 0.015f);
+                yield return new WaitForSeconds(0.0001f);
+            }
+            else if (TrashSilh.GetComponent<SpriteRenderer>().color.a > 0f)
+            {
+                positive = false;
+                TrashSilh.GetComponent<SpriteRenderer>().color = new Color(TrashSilh.GetComponent<SpriteRenderer>().color.r, TrashSilh.GetComponent<SpriteRenderer>().color.g, TrashSilh.GetComponent<SpriteRenderer>().color.b, TrashSilh.GetComponent<SpriteRenderer>().color.a - 0.015f);
+                yield return new WaitForSeconds(0.0001f);
+            }
+            else
+            {
+                positive = true;
+                yield return new WaitForSeconds(0.0001f);
+            }
+        }
+
+        TrashSilh.GetComponent<SpriteRenderer>().color = new Color(TrashSilh.GetComponent<SpriteRenderer>().color.r, TrashSilh.GetComponent<SpriteRenderer>().color.g, TrashSilh.GetComponent<SpriteRenderer>().color.b, 0f);
+        TrashSilh.SetActive(false);
+
+        //SORT Introduction (either in this ienumerator or in seperate ienumerator)
+
+        
+        cutscene.SetActive(false);
+        sort.SetActive(true);
+        //tried fade-out, it didnt work TT
+        main.SetActive(false);
+        gameObject.GetComponent<Trash>().enabled = true;
+        
         tapped = false;
         btn = "";
 
