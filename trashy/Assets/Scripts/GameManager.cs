@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         //gameObject.GetComponent<Trash>().enabled = true;
         //sort.SetActive(true);
 
-        StartCoroutine(introduction());
+        //StartCoroutine(introduction());
     }
 
     // Update is called once per frame
@@ -247,46 +247,14 @@ public class GameManager : MonoBehaviour
 
         //COLOR IS IN DECIMALS
 
-        mapSilh.SetActive(true);
-        mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, 0f);
-
-        //continue after map is pressed
-        bool positive = false;
-        //is false when number going up
-        //is true when number going down
-        btn = "";
-        while (!(btn == "Map"))
-        {
-            if (positive && mapSilh.GetComponent<SpriteRenderer>().color.a < 0.4f)
-            {
-                mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, mapSilh.GetComponent<SpriteRenderer>().color.a + 0.015f);
-                yield return new WaitForSeconds(0.0001f);
-            }
-            else if (mapSilh.GetComponent<SpriteRenderer>().color.a > 0f)
-            {
-                positive = false;
-                mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, mapSilh.GetComponent<SpriteRenderer>().color.a - 0.015f);
-                yield return new WaitForSeconds(0.0001f);
-            }
-            else
-            {
-                positive = true;
-                yield return new WaitForSeconds(0.0001f);
-            }
-        }
-
-        //MAP introduction (either in this ienumerator or in seperate ienumerator)
-        mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, 0f);
-        mapSilh.SetActive(false);
-
-        yield return new WaitForSeconds(1f);
-
         //guide
         guideSilh.SetActive(true);
         guideSilh.GetComponent<SpriteRenderer>().color = new Color(guideSilh.GetComponent<SpriteRenderer>().color.r, guideSilh.GetComponent<SpriteRenderer>().color.g, guideSilh.GetComponent<SpriteRenderer>().color.b, 0f);
 
         //continue after guide is pressed
-        positive = false;
+        bool positive = false;
+        //is false when number going up
+        //is true when number going down
         btn = "";
         while (!(btn == "Guide"))
         {
@@ -311,6 +279,39 @@ public class GameManager : MonoBehaviour
         //GUIDE introduction (either in this ienumerator or in seperate ienumerator)
         guideSilh.GetComponent<SpriteRenderer>().color = new Color(guideSilh.GetComponent<SpriteRenderer>().color.r, guideSilh.GetComponent<SpriteRenderer>().color.g, guideSilh.GetComponent<SpriteRenderer>().color.b, 0f);
         guideSilh.SetActive(false);
+
+        yield return new WaitForSeconds(1f);
+
+        //MAP introduction
+        mapSilh.SetActive(true);
+        mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, 0f);
+
+        //continue after map is pressed
+        positive = false;
+        btn = "";
+        while (!(btn == "Map"))
+        {
+            if (positive && mapSilh.GetComponent<SpriteRenderer>().color.a < 0.4f)
+            {
+                mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, mapSilh.GetComponent<SpriteRenderer>().color.a + 0.015f);
+                yield return new WaitForSeconds(0.0001f);
+            }
+            else if (mapSilh.GetComponent<SpriteRenderer>().color.a > 0f)
+            {
+                positive = false;
+                mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, mapSilh.GetComponent<SpriteRenderer>().color.a - 0.015f);
+                yield return new WaitForSeconds(0.0001f);
+            }
+            else
+            {
+                positive = true;
+                yield return new WaitForSeconds(0.0001f);
+            }
+        }
+
+        //MAP introduction (either in this ienumerator or in seperate ienumerator)
+        mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, 0f);
+        mapSilh.SetActive(false);
 
         yield return new WaitForSeconds(1f);
 
@@ -377,13 +378,13 @@ public class GameManager : MonoBehaviour
 
         //SORT Introduction (either in this ienumerator or in seperate ienumerator)
 
-        
+
         cutscene.SetActive(false);
         sort.SetActive(true);
         //tried fade-out, it didnt work TT
         main.SetActive(false);
         gameObject.GetComponent<Trash>().enabled = true;
-        
+
         tapped = false;
         btn = "";
 
