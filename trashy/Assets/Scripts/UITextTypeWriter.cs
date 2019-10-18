@@ -1,27 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
-// attach to UI Text component (with the full text already there)
+using TMPro;
 
 public class UITextTypeWriter : MonoBehaviour
 {
     //Thank you: https://unitycoder.com/blog/2015/12/03/ui-text-typewriter-effect-script/
 
     Text txt;
+    TextMeshProUGUI count;
     string story;
+    int score;
 
-	float speed = 0.125f;
+    float speed = 0.125f;
 
     void Start()
-    {
-		txt = gameObject.GetComponent<Text>();
+    { 
     }
 
     public void typewrite(string story, float speed)
     {
+        txt = gameObject.GetComponent<Text>();
         this.story = story;
-		this.speed = speed;
+        this.speed = speed;
         txt.text = "";
 
         // TODO: add optional delay when to start
@@ -30,7 +31,7 @@ public class UITextTypeWriter : MonoBehaviour
 
     public void stop()
     {
-        StopCoroutine("PlayText");
+        StopAllCoroutines();
     }
 
     IEnumerator PlayText()
@@ -40,6 +41,27 @@ public class UITextTypeWriter : MonoBehaviour
             txt.text += c;
             yield return new WaitForSeconds(speed);
         }
+        yield return null;
+    }
+
+    public void countup(int score, float speed)
+    {
+        count = gameObject.GetComponent<TextMeshProUGUI>();
+        this.score = score;
+        this.speed = speed;
+        count.text = "";
+
+        StartCoroutine("PlayTextCount");
+    }
+
+    IEnumerator PlayTextCount()
+    {
+        for (int i = 1; i <= score; i++)
+        {
+            count.text = "" + i;
+            yield return new WaitForSeconds(speed);
+        }
+        yield return null;
     }
 
 }

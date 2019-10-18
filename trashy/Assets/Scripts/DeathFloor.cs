@@ -27,6 +27,7 @@ public class DeathFloor : MonoBehaviour
             if (collision.gameObject.GetComponent<ItemController>().info.type == bin)
             {
                 gameManager.GetComponent<Trash>().score += 20;
+                gameManager.GetComponent<Trash>().good++;
             }
             else
             {
@@ -37,6 +38,7 @@ public class DeathFloor : MonoBehaviour
                 else if (bin == "Trash")
                 {
                     gameManager.GetComponent<Trash>().score -= 5;
+                    gameManager.GetComponent<Trash>().bad++;
                 }
                 else
                 {
@@ -44,7 +46,7 @@ public class DeathFloor : MonoBehaviour
                 }
             }
         }
-        
-            Destroy(collision.gameObject, 0.5f);
+
+        Destroy(collision.gameObject, 0.5f);
     }
 }

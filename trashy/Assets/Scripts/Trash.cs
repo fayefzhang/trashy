@@ -7,6 +7,8 @@ public class Trash : MonoBehaviour
 {
     [Header("Game")]
     public int score = 0;
+    public int good = 0;
+    public int bad = 0;
 
     [SerializeField] Text scoreDisplay;
 
@@ -25,7 +27,7 @@ public class Trash : MonoBehaviour
     public Button rArrow;
     public Button lArrow;
 
-    [Header("Properties")]
+    [Header("Item Properties")]
     public float spacermin = 1f;
     public float spacermax = 2.5f;
 
@@ -41,15 +43,31 @@ public class Trash : MonoBehaviour
 
     [SerializeField] private State state;
 
+    private enum TrashState
+    {
+        Recycling, Trash, Compost
+    }
+
+    [SerializeField] private TrashState trashstate;
+    [SerializeField] private TrashState ptrashstate;
+
+    private bool swapped = true;
+    private float buffer = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
         state = State.Sorting;
+        swapped = true;
 
         //assigning variables into items[]
         items[0] = trash1;
         items[1] = trash2;
         items[2] = rec1;
+
+        ptrashstate = TrashState.Trash; //setting ptrashstate as trash (when starting)
+        trashstate = TrashState.Trash;
+        tbin.SetActive(true);
 
         StartCoroutine(SpawnTrash());
         lArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 1f, 1f); //left is blue
@@ -60,6 +78,78 @@ public class Trash : MonoBehaviour
     void Update()
     {
         scoreDisplay.GetComponent<Text>().text = "" + score;
+
+        if (trashstate == TrashState.Recycling)
+        {
+            rbin.transform.position = new Vector3(160f, rbin.transform.position.y, 0);
+            lArrow.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); //left is green
+            rArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1f); //right is black
+        }
+        else if (trashstate == TrashState.Compost)
+        {
+            cbin.transform.position = new Vector3(160f, rbin.transform.position.y, 0);
+            lArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1f); //left is black
+            rArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 1f, 1f); //right is blue
+        }
+        else if (trashstate == TrashState.Trash)
+        {
+            tbin.transform.position = new Vector3(160f, rbin.transform.position.y, 0);
+            lArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 1f, 1f); //left is blue
+            rArrow.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); //right is green
+        }
+
+        if (!swapped)
+        {
+            cbin.SetActive(false);
+            tbin.SetActive(false);
+            rbin.SetActive(false);
+
+            //ptrashstate -> trashstate
+            if (ptrashstate == TrashState.Recycling && trashstate == TrashState.Compost)
+            {
+                rbin.transform.position = new Vector3(160f, rbin.transform.position.y, 0);
+                rbin.SetActive(true);
+                StopCoroutine("exchangeBin");
+                StartCoroutine(exchangeBin(rbin, cbin, false));
+            }
+            else if (ptrashstate == TrashState.Compost && trashstate == TrashState.Trash)
+            {
+                cbin.transform.position = new Vector3(160f, rbin.transform.position.y, 0);
+                cbin.SetActive(true);
+                StopCoroutine("exchangeBin");
+                StartCoroutine(exchangeBin(cbin, tbin, false));
+            }
+            else if (ptrashstate == TrashState.Trash && trashstate == TrashState.Recycling)
+            {
+                tbin.transform.position = new Vector3(160f, rbin.transform.position.y, 0);
+                tbin.SetActive(true);
+                StopCoroutine("exchangeBin");
+                StartCoroutine(exchangeBin(tbin, rbin, false));
+            }
+            else if (ptrashstate == TrashState.Recycling && trashstate == TrashState.Trash)
+            {
+                rbin.transform.position = new Vector3(158.5f, rbin.transform.position.y, 0);
+                rbin.SetActive(true);
+                StopCoroutine("exchangeBin");
+                StartCoroutine(exchangeBin(rbin, tbin, true));
+            }
+            else if (ptrashstate == TrashState.Trash && trashstate == TrashState.Compost)
+            {
+                tbin.transform.position = new Vector3(158.5f, rbin.transform.position.y, 0);
+                tbin.SetActive(true);
+                StopCoroutine("exchangeBin");
+                StartCoroutine(exchangeBin(tbin, cbin, true));
+            }
+            else if (ptrashstate == TrashState.Compost && trashstate == TrashState.Recycling)
+            {
+                cbin.transform.position = new Vector3(158.5f, rbin.transform.position.y, 0);
+                cbin.SetActive(true);
+                StopCoroutine("exchangeBin");
+                StartCoroutine(exchangeBin(cbin, rbin, true));
+            }
+            swapped = true;
+        }
+        buffer += Time.deltaTime;
     }
 
     //spawns trash prefabs
@@ -67,7 +157,6 @@ public class Trash : MonoBehaviour
     {
         GameObject em = Instantiate(obj, new Vector3(Random.Range(155f, 168f), 600f, 0f), Quaternion.identity);
     }
-
     IEnumerator SpawnTrash()
     {
         while (state == State.Sorting)
@@ -106,26 +195,59 @@ public class Trash : MonoBehaviour
 
     public void swipeRight()
     {
-        if (rbin.activeSelf)
-            StartCoroutine(exchangeBin(rbin, cbin, false));
-        else if (cbin.activeSelf)
-            StartCoroutine(exchangeBin(cbin, tbin, false));
-        else
-            StartCoroutine(exchangeBin(tbin, rbin, false));
+        if (buffer > 0.1f)
+        {
+            if (trashstate == TrashState.Recycling)
+            {
+                trashstate = TrashState.Compost;
+                ptrashstate = TrashState.Recycling;
+                swapped = false;
+            }
+            else if (trashstate == TrashState.Compost)
+            {
+                trashstate = TrashState.Trash;
+                ptrashstate = TrashState.Compost;
+                swapped = false;
+            }
+            else if (trashstate == TrashState.Trash)
+            {
+                trashstate = TrashState.Recycling;
+                ptrashstate = TrashState.Trash;
+                swapped = false;
+            }
+        }
+        buffer = 0f;
     }
 
     public void swipeLeft()
     {
-        if (rbin.activeSelf)
-            StartCoroutine(exchangeBin(rbin, tbin, true));
-        else if (tbin.activeSelf)
-            StartCoroutine(exchangeBin(tbin, cbin, true));
-        else
-            StartCoroutine(exchangeBin(cbin, rbin, true));
+        if (buffer > 0.1f)
+        {
+            if (trashstate == TrashState.Recycling)
+            {
+                trashstate = TrashState.Trash;
+                ptrashstate = TrashState.Recycling;
+                swapped = false;
+            }
+            else if (trashstate == TrashState.Compost)
+            {
+                trashstate = TrashState.Recycling;
+                ptrashstate = TrashState.Compost;
+                swapped = false;
+            }
+            else if (trashstate == TrashState.Trash)
+            {
+                trashstate = TrashState.Compost;
+                ptrashstate = TrashState.Trash;
+                swapped = false;
+            }
+        }
+        buffer = 0f;
     }
 
     IEnumerator exchangeBin(GameObject binOff, GameObject binOn, bool isLeft)
     {
+        swapped = true;
         //if swipe is left
         if (isLeft)
         {
@@ -137,16 +259,17 @@ public class Trash : MonoBehaviour
                 yield return new WaitForSeconds(0.005f);
             }
             binOff.SetActive(false);
-            //binOff.transform.position = new Vector3(0, binOff.transform.position.y, 0);
+            //binOff.transform.position = new Vector3(-16.5f, binOff.transform.position.y, 0);
 
             binOn.transform.position = new Vector3(400f, binOn.transform.position.y, 0);
             binOn.SetActive(true);
-            while (binOn.transform.position.x > 158.5f)
+            while (binOn.transform.position.x > 160f)
             {
                 //move bin to the left
                 binOn.transform.position = new Vector3(binOn.transform.position.x - 35f, binOn.transform.position.y, 0);
                 yield return new WaitForSeconds(0.005f);
             }
+            //binOn.transform.position = new Vector3(160f, binOn.transform.position.y, 0);
         }
         else
         {
@@ -162,28 +285,12 @@ public class Trash : MonoBehaviour
 
             binOn.transform.position = new Vector3(-15f, binOn.transform.position.y, 0);
             binOn.SetActive(true);
-            while (binOn.transform.position.x < 158.5f)
+            while (binOn.transform.position.x < 160f)
             {
                 //move bin to the left
                 binOn.transform.position = new Vector3(binOn.transform.position.x + 35f, binOn.transform.position.y, 0);
                 yield return new WaitForSeconds(0.005f);
             }
-        }
-
-        if (rbin.activeSelf)
-        {
-            lArrow.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); //left is green
-            rArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1f); //right is black
-        }
-        else if (cbin.activeSelf)
-        {
-            lArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1f); //left is black
-            rArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 1f, 1f); //right is blue
-        }
-        else
-        {
-            lArrow.GetComponent<Image>().color = new Color(0.5f, 0.5f, 1f, 1f); //left is blue
-            rArrow.GetComponent<Image>().color = new Color(0.5f, 1f, 0.5f, 1f); //right is green
         }
         yield return null;
     }

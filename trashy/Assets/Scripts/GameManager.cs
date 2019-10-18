@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject cutscene;
     [SerializeField] GameObject main;
     [SerializeField] GameObject sort;
+    [SerializeField] GameObject score;
+    [SerializeField] GameObject guide;
 
     [Header("Cutscenes")]
     [SerializeField] GameObject cutsceneChar;
@@ -19,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject cutsceneDialogueBg;
     [SerializeField] Text cutsceneTap2Continue;
     [SerializeField] GameObject cutsceneBg;
+    [SerializeField] GameObject touch;
 
     [Header("Main")]
     [SerializeField] GameObject mainBg;
@@ -36,6 +39,8 @@ public class GameManager : MonoBehaviour
         cutscene.SetActive(false);
         main.SetActive(false);
         sort.SetActive(false);
+        score.SetActive(false);
+        guide.SetActive(false);
 
         if (!debugSkip)
         {
@@ -60,6 +65,8 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(introduction());
             }
         }
+
+        main.SetActive(true);
 
         //gameObject.GetComponent<Trash>().enabled = true;
         //sort.SetActive(true);
@@ -87,6 +94,8 @@ public class GameManager : MonoBehaviour
         guideSilh.SetActive(false);
         CBOISilh.SetActive(false);
         TrashSilh.SetActive(false);
+        touch.SetActive(false);
+        touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0);
 
         yield return new WaitForSeconds(1f);
 
@@ -256,8 +265,10 @@ public class GameManager : MonoBehaviour
         //is false when number going up
         //is true when number going down
         btn = "";
+        float timer = 0f;
         while (!(btn == "Guide"))
         {
+            timer += Time.deltaTime;
             if (positive && guideSilh.GetComponent<SpriteRenderer>().color.a < 0.4f)
             {
                 guideSilh.GetComponent<SpriteRenderer>().color = new Color(guideSilh.GetComponent<SpriteRenderer>().color.r, guideSilh.GetComponent<SpriteRenderer>().color.g, guideSilh.GetComponent<SpriteRenderer>().color.b, guideSilh.GetComponent<SpriteRenderer>().color.a + 0.015f);
@@ -274,7 +285,18 @@ public class GameManager : MonoBehaviour
                 positive = true;
                 yield return new WaitForSeconds(0.0001f);
             }
+            if (timer >= 4f)
+            {
+                touch.SetActive(true);
+                touch.transform.position = new Vector3(77.9f, 383.8f, 0f);
+                if (touch.GetComponent<SpriteRenderer>().color.a < 175f / 255f)
+                    touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (timer - 4f) / 5f);
+                else
+                    touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 175f / 255f);
+            }
         }
+        touch.SetActive(false);
+        touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0);
 
         //GUIDE introduction (either in this ienumerator or in seperate ienumerator)
         guideSilh.GetComponent<SpriteRenderer>().color = new Color(guideSilh.GetComponent<SpriteRenderer>().color.r, guideSilh.GetComponent<SpriteRenderer>().color.g, guideSilh.GetComponent<SpriteRenderer>().color.b, 0f);
@@ -288,9 +310,11 @@ public class GameManager : MonoBehaviour
 
         //continue after map is pressed
         positive = false;
+        timer = 0f;
         btn = "";
         while (!(btn == "Map"))
         {
+            timer += Time.deltaTime;
             if (positive && mapSilh.GetComponent<SpriteRenderer>().color.a < 0.4f)
             {
                 mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, mapSilh.GetComponent<SpriteRenderer>().color.a + 0.015f);
@@ -307,7 +331,18 @@ public class GameManager : MonoBehaviour
                 positive = true;
                 yield return new WaitForSeconds(0.0001f);
             }
+            if (timer >= 4f)
+            {
+                touch.SetActive(true);
+                touch.transform.position = new Vector3(228.1f, 458.6f, 0f);
+                if (touch.GetComponent<SpriteRenderer>().color.a < 175f / 255f)
+                    touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (timer - 4f) / 5f);
+                else
+                    touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 175f / 255f);
+            }
         }
+        touch.SetActive(false);
+        touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0);
 
         //MAP introduction (either in this ienumerator or in seperate ienumerator)
         mapSilh.GetComponent<SpriteRenderer>().color = new Color(mapSilh.GetComponent<SpriteRenderer>().color.r, mapSilh.GetComponent<SpriteRenderer>().color.g, mapSilh.GetComponent<SpriteRenderer>().color.b, 0f);
@@ -323,6 +358,7 @@ public class GameManager : MonoBehaviour
         btn = "";
         while (!(btn == "CBOI"))
         {
+            timer += Time.deltaTime;
             if (positive && CBOISilh.GetComponent<SpriteRenderer>().color.a < 0.4f)
             {
                 CBOISilh.GetComponent<SpriteRenderer>().color = new Color(CBOISilh.GetComponent<SpriteRenderer>().color.r, CBOISilh.GetComponent<SpriteRenderer>().color.g, CBOISilh.GetComponent<SpriteRenderer>().color.b, CBOISilh.GetComponent<SpriteRenderer>().color.a + 0.015f);
@@ -339,7 +375,18 @@ public class GameManager : MonoBehaviour
                 positive = true;
                 yield return new WaitForSeconds(0.0001f);
             }
+            if (timer >= 4f)
+            {
+                touch.SetActive(true);
+                touch.transform.position = new Vector3(150.2f, 106.9f, 0f);
+                if (touch.GetComponent<SpriteRenderer>().color.a < 175f / 255f)
+                    touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (timer - 4f) / 5f);
+                else
+                    touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 175f / 255f);
+            }
         }
+        touch.SetActive(false);
+        touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0);
 
         //SORT (cboi) introduction (either in this ienumerator or in seperate ienumerator)
         CBOISilh.GetComponent<SpriteRenderer>().color = new Color(CBOISilh.GetComponent<SpriteRenderer>().color.r, CBOISilh.GetComponent<SpriteRenderer>().color.g, CBOISilh.GetComponent<SpriteRenderer>().color.b, 0f);
@@ -352,9 +399,11 @@ public class GameManager : MonoBehaviour
         TrashSilh.GetComponent<SpriteRenderer>().color = new Color(TrashSilh.GetComponent<SpriteRenderer>().color.r, TrashSilh.GetComponent<SpriteRenderer>().color.g, TrashSilh.GetComponent<SpriteRenderer>().color.b, 0f);
 
         positive = false;
+        timer = 0f;
         btn = "";
         while (!(btn == "Trash"))
         {
+            timer += Time.deltaTime;
             if (positive && TrashSilh.GetComponent<SpriteRenderer>().color.a < 0.4f)
             {
                 TrashSilh.GetComponent<SpriteRenderer>().color = new Color(TrashSilh.GetComponent<SpriteRenderer>().color.r, TrashSilh.GetComponent<SpriteRenderer>().color.g, TrashSilh.GetComponent<SpriteRenderer>().color.b, TrashSilh.GetComponent<SpriteRenderer>().color.a + 0.015f);
@@ -371,7 +420,18 @@ public class GameManager : MonoBehaviour
                 positive = true;
                 yield return new WaitForSeconds(0.0001f);
             }
+            if (timer >= 4f)
+            {
+                touch.SetActive(true);
+                touch.transform.position = new Vector3(287.3f, 27.4f, 0f);
+                if (touch.GetComponent<SpriteRenderer>().color.a < 175f / 255f)
+                    touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (timer - 4f) / 5f);
+                else
+                    touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 175f / 255f);
+            }
         }
+        touch.SetActive(false);
+        touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0);
 
         TrashSilh.GetComponent<SpriteRenderer>().color = new Color(TrashSilh.GetComponent<SpriteRenderer>().color.r, TrashSilh.GetComponent<SpriteRenderer>().color.g, TrashSilh.GetComponent<SpriteRenderer>().color.b, 0f);
         TrashSilh.SetActive(false);
@@ -399,5 +459,6 @@ public class GameManager : MonoBehaviour
     public void button(string btn)
     {
         this.btn = btn;
+        print(btn);
     }
 }
