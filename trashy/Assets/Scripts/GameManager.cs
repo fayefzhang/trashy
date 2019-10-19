@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject mapSilh;
     [SerializeField] GameObject CBOISilh;
     [SerializeField] GameObject TrashSilh;
+    [SerializeField] GameObject mainCBOI;
 
     private bool tapped = false;
     private string btn = "";
@@ -67,6 +68,7 @@ public class GameManager : MonoBehaviour
         }
 
         main.SetActive(true);
+        mainCBOI.SetActive(true);
 
         //gameObject.GetComponent<Trash>().enabled = true;
         //sort.SetActive(true);
