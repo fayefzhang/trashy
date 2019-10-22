@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class Trash : MonoBehaviour
 {
     [Header("Game")]
-    public int score = 0;
-    public int good = 0;
-    public int bad = 0;
+    int score = 0;
+    int good = 0;
+    int bad = 0;
 
     [SerializeField] Text scoreDisplay;
 
@@ -103,6 +103,8 @@ public class Trash : MonoBehaviour
             cbin.SetActive(false);
             tbin.SetActive(false);
             rbin.SetActive(false);
+            
+            swapped = true;
 
             //ptrashstate -> trashstate
             if (ptrashstate == TrashState.Recycling && trashstate == TrashState.Compost)
@@ -147,7 +149,6 @@ public class Trash : MonoBehaviour
                 StopCoroutine("exchangeBin");
                 StartCoroutine(exchangeBin(cbin, rbin, true));
             }
-            swapped = true;
         }
         buffer += Time.deltaTime;
     }
@@ -191,6 +192,27 @@ public class Trash : MonoBehaviour
             return "sorting";
         else
             return "ended";
+    }
+
+    public void changeScore(string name, int points)
+    {
+        if (name == "score")
+        {
+            score += points;
+        }
+        else if (name == "good")
+        {
+            good += points;
+        }
+        else if (name == "bad")
+        {
+            bad += points;
+        }
+    }
+
+    public int[] getScore()
+    {
+        return new int[] {good, bad, score};
     }
 
     public void swipeRight()
@@ -256,7 +278,7 @@ public class Trash : MonoBehaviour
             {
                 //move bin to the left, yeet it off screen
                 binOff.transform.position = new Vector3(binOff.transform.position.x - 35f, binOff.transform.position.y, 0);
-                yield return new WaitForSeconds(0.005f);
+                yield return new WaitForSeconds(0.01f);
             }
             binOff.SetActive(false);
             //binOff.transform.position = new Vector3(-16.5f, binOff.transform.position.y, 0);
@@ -267,7 +289,7 @@ public class Trash : MonoBehaviour
             {
                 //move bin to the left
                 binOn.transform.position = new Vector3(binOn.transform.position.x - 35f, binOn.transform.position.y, 0);
-                yield return new WaitForSeconds(0.005f);
+                yield return new WaitForSeconds(0.01f);
             }
             //binOn.transform.position = new Vector3(160f, binOn.transform.position.y, 0);
         }
@@ -278,7 +300,7 @@ public class Trash : MonoBehaviour
             {
                 //move bin to the left, yeet it off screen
                 binOff.transform.position = new Vector3(binOff.transform.position.x + 35f, binOff.transform.position.y, 0);
-                yield return new WaitForSeconds(0.005f);
+                yield return new WaitForSeconds(0.01f);
             }
             binOff.SetActive(false);
             //binOff.transform.position = new Vector3(0, binOff.transform.position.y, 0);
@@ -289,7 +311,7 @@ public class Trash : MonoBehaviour
             {
                 //move bin to the left
                 binOn.transform.position = new Vector3(binOn.transform.position.x + 35f, binOn.transform.position.y, 0);
-                yield return new WaitForSeconds(0.005f);
+                yield return new WaitForSeconds(0.01f);
             }
         }
         yield return null;

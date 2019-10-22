@@ -15,7 +15,7 @@ public class UITextTypeWriter : MonoBehaviour
     float speed = 0.125f;
 
     void Start()
-    { 
+    {
     }
 
     public void typewrite(string story, float speed)
@@ -56,10 +56,17 @@ public class UITextTypeWriter : MonoBehaviour
 
     IEnumerator PlayTextCount()
     {
-        for (int i = 1; i <= score; i++)
+        if (score == 0)
         {
-            count.text = "" + i;
-            yield return new WaitForSeconds(speed);
+            count.text = "" + 0;
+        }
+        else
+        {
+            for (int i = 1; i <= score; i++)
+            {
+                count.text = "" + i;
+                yield return new WaitForSeconds(speed);
+            }
         }
         yield return null;
     }

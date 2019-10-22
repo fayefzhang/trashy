@@ -26,23 +26,24 @@ public class DeathFloor : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<ItemController>().info.type == bin)
             {
-                gameManager.GetComponent<Trash>().score += 20;
-                gameManager.GetComponent<Trash>().good++;
+                gameManager.GetComponent<Trash>().changeScore("score", 20);
+                gameManager.GetComponent<Trash>().changeScore("good", 1);
             }
             else
             {
                 if (bin == "Compost" || bin == "Recycling")
                 {
                     gameManager.GetComponent<Trash>().endGame();
+                    gameManager.GetComponent<GameManager>().startScore();
                 }
                 else if (bin == "Trash")
                 {
-                    gameManager.GetComponent<Trash>().score -= 5;
-                    gameManager.GetComponent<Trash>().bad++;
+                    gameManager.GetComponent<Trash>().changeScore("score", -5);
+                    gameManager.GetComponent<Trash>().changeScore("bad", 1);
                 }
                 else
                 {
-                    Debug.Log("u named something wrong, check if 'recycling' is named correctly dude");
+                    Debug.Log("you named something wrong, check if 'recycling' is named correctly");
                 }
             }
         }

@@ -13,7 +13,7 @@ public class Guide : MonoBehaviour
     [SerializeField] Sprite page4;
 
     [Header("Content")]
-    [SerializeField] GameObject content;
+    [SerializeField] GameObject intro;
 
     private enum State
     {
@@ -33,7 +33,7 @@ public class Guide : MonoBehaviour
     {
         if (state == State.Intro)
         {
-            content.GetComponent<TextMeshProUGUI>().text = "yikes this works";
+            intro.SetActive(true);
         }
     }
 

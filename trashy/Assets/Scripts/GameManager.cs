@@ -29,10 +29,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject mapSilh;
     [SerializeField] GameObject CBOISilh;
     [SerializeField] GameObject TrashSilh;
-    [SerializeField] GameObject mainCBOI;
 
     private bool tapped = false;
     private string btn = "";
+
+    private bool switchedScene = false;
 
     // Start is called before the first frame update
     void Start()
@@ -50,11 +51,12 @@ public class GameManager : MonoBehaviour
                 main.SetActive(true);
                 mainBg.transform.position = new Vector3(768.5f, mainBg.transform.position.y, mainBg.transform.position.z);
 
-                cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
-                cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
-                CBOISilh.GetComponent<SpriteRenderer>().flipX = true;
-                CBOISilh.transform.position = new Vector3(135.67f, CBOISilh.transform.position.y, CBOISilh.transform.position.z);
-                cutsceneChar.transform.position = new Vector3(-30.5f, -145.2f, 0f);
+                //incorrect heccingaljdf;lkajk fix this later
+                // cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
+                // cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
+                // CBOISilh.GetComponent<SpriteRenderer>().flipX = true;
+                // CBOISilh.transform.position = new Vector3(135.67f, CBOISilh.transform.position.y, CBOISilh.transform.position.z);
+                // cutsceneChar.transform.position = new Vector3(-30.5f, -145.2f, 0f);
             }
             else
             {
@@ -68,7 +70,12 @@ public class GameManager : MonoBehaviour
         }
 
         main.SetActive(true);
-        mainCBOI.SetActive(true);
+        cutscene.SetActive(true);
+        cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
+        cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
+        cutsceneChar.transform.position = new Vector3(130.67f, 140.2f, 0f);
+
+        //score.SetActive(true);
 
         //gameObject.GetComponent<Trash>().enabled = true;
         //sort.SetActive(true);
@@ -98,6 +105,11 @@ public class GameManager : MonoBehaviour
         TrashSilh.SetActive(false);
         touch.SetActive(false);
         touch.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0);
+
+        cutsceneCharName.gameObject.SetActive(true);
+        cutsceneDialogue.gameObject.SetActive(true);
+        cutsceneDialogueBg.SetActive(true);
+        cutsceneBg.SetActive(true);
 
         yield return new WaitForSeconds(1f);
 
@@ -461,6 +473,36 @@ public class GameManager : MonoBehaviour
     public void button(string btn)
     {
         this.btn = btn;
-        print(btn);
+
+        if (!switchedScene)
+        {
+            if (btn == "Trash")
+            {
+                cutscene.SetActive(false);
+                main.SetActive(false);
+                gameObject.GetComponent<Trash>().enabled = true;
+                sort.SetActive(true);
+            }
+            else if (btn == "Guide")
+            {
+                guide.SetActive(true);
+            }
+            else if (btn == "Back")
+            {
+                guide.SetActive(false);
+            }
+            else if (btn == "Back2")
+            {
+                main.SetActive(true);
+                sort.SetActive(false);
+                score.SetActive(false);
+                cutscene.SetActive(true);
+            }
+        }
+    }
+
+    public void startScore()
+    {
+        score.SetActive(true);
     }
 }
