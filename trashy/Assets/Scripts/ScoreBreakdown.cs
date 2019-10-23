@@ -32,9 +32,20 @@ public class ScoreBreakdown : MonoBehaviour
         goodScore = GameManager.GetComponent<Trash>().getScore()[0];
         badScore = GameManager.GetComponent<Trash>().getScore()[1];
         totalscore = GameManager.GetComponent<Trash>().getScore()[2];
-        starscore = (totalscore / 10) + 1;
 
-        print("score: " + goodScore + ", " + badScore + ", " + totalscore);
+        if (totalscore < 0)
+        {
+            totalscore = 0;
+        }
+
+        if (goodScore < -1 * badScore & totalscore <= 0)
+        {
+            starscore = 0;
+        }
+        else
+        {
+            starscore = (totalscore / 10) + 1;
+        }
 
         good.GetComponent<TextMeshProUGUI>().text = "";
         bad.GetComponent<TextMeshProUGUI>().text = "";
@@ -71,19 +82,19 @@ public class ScoreBreakdown : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        total.GetComponent<UITextTypeWriter>().countup(goodScore + badScore, 0.0625f);
+        total.GetComponent<UITextTypeWriter>().countup(totalscore, 0.0325f);
 
-        yield return new WaitForSeconds((goodScore + badScore) * 0.0625f + 1);
+        yield return new WaitForSeconds((totalscore) * 0.0325f + 1);
 
-        stars.GetComponent<UITextTypeWriter>().countup((goodScore + badScore) / 10 + 1, 0.2f);
+        stars.GetComponent<UITextTypeWriter>().countup(starscore, 0.2f);
 
-        yield return new WaitForSeconds((goodScore + badScore) / 10 * 0.2f);
+        yield return new WaitForSeconds(starscore * 0.2f);
 
         if (!particles.isPlaying)
         {
             particles.Play();
         }
-        
+
         while (back.GetComponent<Image>().color.a < 1f)
         {
             back.GetComponent<Image>().color = new Color(1f, 1f, 1f, back.GetComponent<Image>().color.a + 0.09f);
@@ -99,7 +110,7 @@ public class ScoreBreakdown : MonoBehaviour
     }
 
     IEnumerator tomain()
-    {        
+    {
         while (panel.GetComponent<Image>().color.a < 1f)
         {
             panel.GetComponent<Image>().color = new Color(1f, 1f, 1f, panel.GetComponent<Image>().color.a + 0.04f);

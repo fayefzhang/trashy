@@ -30,6 +30,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject CBOISilh;
     [SerializeField] GameObject TrashSilh;
 
+    [Header("AudioClips")]
+    [SerializeField] AudioClip bgmainclip;
+    [SerializeField] AudioClip bgsortclip;
+    [SerializeField] AudioClip bgmenuclip;
+    AudioSource musicource;
+    AudioSource sfxsource;
+
     private bool tapped = false;
     private string btn = "";
 
@@ -38,6 +45,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //set everything to inactive (none of them should be active, it will cause things to break)
         cutscene.SetActive(false);
         main.SetActive(false);
         sort.SetActive(false);
@@ -49,14 +57,10 @@ public class GameManager : MonoBehaviour
             if (PlayerPrefs.GetInt("hasPlayed") == 1)
             {
                 main.SetActive(true);
-                mainBg.transform.position = new Vector3(768.5f, mainBg.transform.position.y, mainBg.transform.position.z);
-
-                //incorrect heccingaljdf;lkajk fix this later
-                // cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
-                // cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
-                // CBOISilh.GetComponent<SpriteRenderer>().flipX = true;
-                // CBOISilh.transform.position = new Vector3(135.67f, CBOISilh.transform.position.y, CBOISilh.transform.position.z);
-                // cutsceneChar.transform.position = new Vector3(-30.5f, -145.2f, 0f);
+                cutscene.SetActive(true);
+                cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
+                cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
+                cutsceneChar.transform.position = new Vector3(130.67f, 140.2f, 0f);
             }
             else
             {
@@ -75,18 +79,58 @@ public class GameManager : MonoBehaviour
         cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
         cutsceneChar.transform.position = new Vector3(130.67f, 140.2f, 0f);
 
-        //score.SetActive(true);
+        //AUDIO
 
-        //gameObject.GetComponent<Trash>().enabled = true;
-        //sort.SetActive(true);
 
         //StartCoroutine(introduction());
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    public void tap()
+    {
+        tapped = true;
+    }
+
+    public void button(string btn)
+    {
+        this.btn = btn;
+
+        if (!switchedScene)
+        {
+            if (btn == "Trash")
+            {
+                cutscene.SetActive(false);
+                main.SetActive(false);
+                gameObject.GetComponent<Trash>().enabled = true;
+                sort.SetActive(true);
+            }
+            else if (btn == "Guide")
+            {
+                guide.SetActive(true);
+            }
+            else if (btn == "Back")
+            {
+                guide.SetActive(false);
+            }
+            else if (btn == "Back2")
+            {
+                main.SetActive(true);
+                sort.SetActive(false);
+                score.SetActive(false);
+                cutscene.SetActive(true);
+            }
+        }
+    }
+
+    public void startScore()
+    {
+        score.SetActive(true);
     }
 
     IEnumerator introduction()
@@ -463,46 +507,5 @@ public class GameManager : MonoBehaviour
         btn = "";
 
         yield return null;
-    }
-
-    public void tap()
-    {
-        tapped = true;
-    }
-
-    public void button(string btn)
-    {
-        this.btn = btn;
-
-        if (!switchedScene)
-        {
-            if (btn == "Trash")
-            {
-                cutscene.SetActive(false);
-                main.SetActive(false);
-                gameObject.GetComponent<Trash>().enabled = true;
-                sort.SetActive(true);
-            }
-            else if (btn == "Guide")
-            {
-                guide.SetActive(true);
-            }
-            else if (btn == "Back")
-            {
-                guide.SetActive(false);
-            }
-            else if (btn == "Back2")
-            {
-                main.SetActive(true);
-                sort.SetActive(false);
-                score.SetActive(false);
-                cutscene.SetActive(true);
-            }
-        }
-    }
-
-    public void startScore()
-    {
-        score.SetActive(true);
     }
 }

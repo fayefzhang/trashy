@@ -178,7 +178,7 @@ public class Trash : MonoBehaviour
         {
             state = State.Ended;
             StopCoroutine(SpawnTrash());
-            print("score: " + score);
+            //print(score);
             state = State.Asleep;
             PlayerPrefs.SetInt("game", score);
         }
@@ -278,7 +278,7 @@ public class Trash : MonoBehaviour
             {
                 //move bin to the left, yeet it off screen
                 binOff.transform.position = new Vector3(binOff.transform.position.x - 35f, binOff.transform.position.y, 0);
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.05f);
             }
             binOff.SetActive(false);
             //binOff.transform.position = new Vector3(-16.5f, binOff.transform.position.y, 0);
@@ -289,7 +289,7 @@ public class Trash : MonoBehaviour
             {
                 //move bin to the left
                 binOn.transform.position = new Vector3(binOn.transform.position.x - 35f, binOn.transform.position.y, 0);
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.05f);
             }
             //binOn.transform.position = new Vector3(160f, binOn.transform.position.y, 0);
         }
@@ -300,7 +300,7 @@ public class Trash : MonoBehaviour
             {
                 //move bin to the left, yeet it off screen
                 binOff.transform.position = new Vector3(binOff.transform.position.x + 35f, binOff.transform.position.y, 0);
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.05f);
             }
             binOff.SetActive(false);
             //binOff.transform.position = new Vector3(0, binOff.transform.position.y, 0);
@@ -311,7 +311,7 @@ public class Trash : MonoBehaviour
             {
                 //move bin to the left
                 binOn.transform.position = new Vector3(binOn.transform.position.x + 35f, binOn.transform.position.y, 0);
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.05f);
             }
         }
         yield return null;
