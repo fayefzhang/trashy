@@ -27,6 +27,16 @@ public class ScoreBreakdown : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+    }
+
+    public void restart()
+    {
+        init();
+    }
+
+    void init()
+    {
         panel.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
 
         goodScore = GameManager.GetComponent<Trash>().getScore()[0];
@@ -81,15 +91,24 @@ public class ScoreBreakdown : MonoBehaviour
 
 
         yield return new WaitForSeconds(1f);
+        if (totalscore != 0)
+        {
+            total.GetComponent<UITextTypeWriter>().countup(totalscore, 2 / totalscore);
 
-        total.GetComponent<UITextTypeWriter>().countup(totalscore, 0.0325f);
+            yield return new WaitForSeconds((2 / totalscore) * totalscore + 1f);
+        }
+        else
+        {
+            total.GetComponent<Text>().text = "0";
 
-        yield return new WaitForSeconds((totalscore) * 0.0325f + 1);
+            yield return new WaitForSeconds(1f);
+        }
 
         stars.GetComponent<UITextTypeWriter>().countup(starscore, 0.2f);
 
         yield return new WaitForSeconds(starscore * 0.2f);
 
+        GameManager.GetComponent<GameManager>().playsound("complete");
         if (!particles.isPlaying)
         {
             particles.Play();
@@ -107,6 +126,7 @@ public class ScoreBreakdown : MonoBehaviour
     public void switchtomain()
     {
         StartCoroutine(tomain());
+        GameManager.GetComponent<GameManager>().playsound("button");
     }
 
     IEnumerator tomain()

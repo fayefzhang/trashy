@@ -28,18 +28,22 @@ public class DeathFloor : MonoBehaviour
             {
                 gameManager.GetComponent<Trash>().changeScore("score", 20);
                 gameManager.GetComponent<Trash>().changeScore("good", 1);
+                //gameManager.GetComponent<GameManager>().playsound("good");
             }
             else
             {
                 if (bin == "Compost" || bin == "Recycling")
                 {
                     gameManager.GetComponent<Trash>().endGame();
-                    gameManager.GetComponent<GameManager>().startScore();
+                    gameManager.GetComponent<GameManager>().playsound("bad");
+                    gameManager.GetComponent<Trash>().strike();
                 }
                 else if (bin == "Trash")
                 {
                     gameManager.GetComponent<Trash>().changeScore("score", -5);
                     gameManager.GetComponent<Trash>().changeScore("bad", 1);
+                    gameManager.GetComponent<Trash>().strike();
+                    gameManager.GetComponent<GameManager>().playsound("bad");
                 }
                 else
                 {

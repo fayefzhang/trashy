@@ -30,17 +30,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject CBOISilh;
     [SerializeField] GameObject TrashSilh;
 
-    [Header("AudioClips")]
+    [Header("Music")]
+    [SerializeField] AudioSource musicource;
     [SerializeField] AudioClip bgmainclip;
     [SerializeField] AudioClip bgsortclip;
     [SerializeField] AudioClip bgmenuclip;
-    AudioSource musicource;
-    AudioSource sfxsource;
+
+    [Header("Sound")]
+    [SerializeField] AudioSource sfxsource;
+    [SerializeField] AudioClip buttonsound;
+    [SerializeField] AudioClip goodsound;
+    [SerializeField] AudioClip badsound;
+    [SerializeField] AudioClip completesound;
 
     private bool tapped = false;
     private string btn = "";
-
-    private bool switchedScene = false;
 
     // Start is called before the first frame update
     void Start()
@@ -80,10 +84,13 @@ public class GameManager : MonoBehaviour
         cutsceneChar.transform.position = new Vector3(130.67f, 140.2f, 0f);
 
         //AUDIO
-
+        musicource.clip = bgmainclip;
+        if (!musicource.isPlaying)
+        {
+            musicource.Play();
+        }
 
         //StartCoroutine(introduction());
-
     }
 
     // Update is called once per frame
@@ -101,36 +108,67 @@ public class GameManager : MonoBehaviour
     {
         this.btn = btn;
 
-        if (!switchedScene)
+        if (btn == "Trash")
         {
-            if (btn == "Trash")
-            {
-                cutscene.SetActive(false);
-                main.SetActive(false);
-                gameObject.GetComponent<Trash>().enabled = true;
-                sort.SetActive(true);
-            }
-            else if (btn == "Guide")
-            {
-                guide.SetActive(true);
-            }
-            else if (btn == "Back")
-            {
-                guide.SetActive(false);
-            }
-            else if (btn == "Back2")
-            {
-                main.SetActive(true);
-                sort.SetActive(false);
-                score.SetActive(false);
-                cutscene.SetActive(true);
-            }
+            cutscene.SetActive(false);
+            main.SetActive(false);
+            gameObject.GetComponent<Trash>().restart();
+            sort.SetActive(true);
+            playsound("button");
+
+            musicource.clip = bgsortclip;
+            if (!musicource.isPlaying)
+                musicource.Play();
+        }
+        else if (btn == "Guide")
+        {
+            guide.SetActive(true);
+            playsound("button");
+        }
+        else if (btn == "Back")
+        {
+            guide.SetActive(false);
+            playsound("button");
+        }
+        else if (btn == "Back2")
+        {
+            main.SetActive(true);
+            sort.SetActive(false);
+            score.SetActive(false);
+            cutscene.SetActive(true);
+
+            musicource.clip = bgmainclip;
+            if (!musicource.isPlaying)
+                musicource.Play();
         }
     }
 
     public void startScore()
     {
         score.SetActive(true);
+        score.GetComponent<ScoreBreakdown>().restart();
+    }
+
+    public void playsound(string soundname)
+    {
+        if (soundname == "button")
+            sfxsource.clip = buttonsound;
+        else if (soundname == "good")
+            sfxsource.clip = goodsound;
+        else if (soundname == "bad")
+            sfxsource.clip = badsound;
+        else if (soundname == "complete")
+            sfxsource.clip = completesound;
+        else
+            return;
+
+        if (!sfxsource.isPlaying)
+            sfxsource.Play();
+        else
+        {
+            sfxsource.Stop();
+            sfxsource.Play();
+        }
     }
 
     IEnumerator introduction()

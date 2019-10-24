@@ -60,6 +60,14 @@ public class UITextTypeWriter : MonoBehaviour
         {
             count.text = "" + 0;
         }
+        else if (score >= 60)
+        {
+            for (int i = 0; i <= score; i+=5)
+            {
+                count.text = "" + i;
+                yield return new WaitForSeconds(speed*5);
+            }
+        }
         else
         {
             for (int i = 1; i <= score; i++)
