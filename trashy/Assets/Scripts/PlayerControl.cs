@@ -45,12 +45,14 @@ public class PlayerControl : MonoBehaviour
                             //Debug.Log("Right Swipe");
                             if (gameObject.GetComponent<Trash>().enabled)
                                 gameObject.GetComponent<Trash>().swipeRight();
+                            gameObject.GetComponent<GameManager>().swipeRight();
                         }
                         else
                         {
                             //Debug.Log("Left Swipe");
                             if (gameObject.GetComponent<Trash>().enabled)
                                 gameObject.GetComponent<Trash>().swipeLeft();
+                            gameObject.GetComponent<GameManager>().swipeLeft();
                         }
                     }
                     else //big vertical moment
@@ -68,7 +70,7 @@ public class PlayerControl : MonoBehaviour
                 else
                 {   //It's a tap as the drag distance is less than 20% of the screen height
                     //print("tap at : (" + lp.x + ", " + lp.y + ")");
-                    
+
                     gameObject.GetComponent<GameManager>().tap();
                 }
             }

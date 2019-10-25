@@ -99,7 +99,7 @@ public class ScoreBreakdown : MonoBehaviour
         }
         else
         {
-            total.GetComponent<Text>().text = "0";
+            total.GetComponent<TextMeshProUGUI>().text = "0";
 
             yield return new WaitForSeconds(1f);
         }

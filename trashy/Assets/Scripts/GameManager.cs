@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioClip goodsound;
     [SerializeField] AudioClip badsound;
     [SerializeField] AudioClip completesound;
+    [SerializeField] AudioClip pagesound;
 
     private bool tapped = false;
     private string btn = "";
@@ -70,10 +71,13 @@ public class GameManager : MonoBehaviour
             {
                 PlayerPrefs.SetInt("hasPlayed", 1);
 
-                cutsceneChar.transform.localScale = new Vector3(17f, 17f, 0f);
-                cutsceneChar.transform.position = new Vector3(30f, 0f, 0f);
-
                 StartCoroutine(introduction());
+
+                musicource.clip = bgmainclip;
+                if (!musicource.isPlaying)
+                {
+                    musicource.Play();
+                }
             }
         }
 
@@ -141,6 +145,22 @@ public class GameManager : MonoBehaviour
             if (!musicource.isPlaying)
                 musicource.Play();
         }
+        else if (btn == "CBOI")
+        {
+            //make sure this doesnt work during the start of the game (or not idk maybe it'd be nice who knowssssssss)
+        }
+    }
+
+    public void swipeRight()
+    {
+        if (guide.activeSelf)
+            guide.GetComponent<Guide>().swipeRight();
+    }
+
+    public void swipeLeft()
+    {
+        if (guide.activeSelf)
+            guide.GetComponent<Guide>().swipeLeft();
     }
 
     public void startScore()
@@ -159,6 +179,8 @@ public class GameManager : MonoBehaviour
             sfxsource.clip = badsound;
         else if (soundname == "complete")
             sfxsource.clip = completesound;
+        else if (soundname == "page")
+            sfxsource.clip = pagesound;
         else
             return;
 
@@ -253,7 +275,7 @@ public class GameManager : MonoBehaviour
         }
 
         cutsceneTap2Continue.enabled = false;
-        cutsceneDialogue.GetComponent<UITextTypeWriter>().typewrite("herro~ I'M C-BOi. your bestest pal! :V", 0.125f);
+        cutsceneDialogue.GetComponent<UITextTypeWriter>().typewrite("Hello! I'm CBOI, your helper robot and, * help and options menu *", 0.125f);
 
         //skip when tapped
         tapped = false;
@@ -264,7 +286,7 @@ public class GameManager : MonoBehaviour
         }
         buffer = 0f;
         cutsceneDialogue.GetComponent<UITextTypeWriter>().stop();
-        cutsceneDialogue.text = "herro~ I'M C-BOi. your bestest pal! :V";
+        cutsceneDialogue.text = "Hello! I'm CBOI, your helper robot and, * help and options menu *";
 
         cutsceneCharName.GetComponent<Text>().text = "CBOI";
         yield return new WaitForSeconds(0.5f);

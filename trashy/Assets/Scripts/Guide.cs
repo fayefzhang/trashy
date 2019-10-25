@@ -6,6 +6,9 @@ using TMPro;
 
 public class Guide : MonoBehaviour
 {
+    [SerializeField] GameObject gameManager;
+    [SerializeField] GameObject notebook;
+
     [Header("Pages")]
     [SerializeField] Sprite page1;
     [SerializeField] Sprite page2;
@@ -14,6 +17,9 @@ public class Guide : MonoBehaviour
 
     [Header("Content")]
     [SerializeField] GameObject intro;
+    [SerializeField] GameObject compost;
+    [SerializeField] GameObject recycle;
+    [SerializeField] GameObject trash;
 
     private enum State
     {
@@ -34,6 +40,34 @@ public class Guide : MonoBehaviour
         if (state == State.Intro)
         {
             intro.SetActive(true);
+            compost.SetActive(false);
+            recycle.SetActive(false);
+            trash.SetActive(false);
+            notebook.GetComponent<Image>().sprite = page1;
+        }
+        else if (state == State.Compost)
+        {
+            intro.SetActive(false);
+            compost.SetActive(true);
+            recycle.SetActive(false);
+            trash.SetActive(false);
+            notebook.GetComponent<Image>().sprite = page2;
+        }
+        else if (state == State.Recycling)
+        {
+            intro.SetActive(false);
+            compost.SetActive(false);
+            recycle.SetActive(true);
+            trash.SetActive(false);
+            notebook.GetComponent<Image>().sprite = page3;
+        }
+        else if (state == State.Trash)
+        {
+            intro.SetActive(false);
+            compost.SetActive(false);
+            recycle.SetActive(false);
+            trash.SetActive(true);
+            notebook.GetComponent<Image>().sprite = page4;
         }
     }
 
@@ -41,37 +75,84 @@ public class Guide : MonoBehaviour
     {
         if (state == State.Intro)
         {
-            this.gameObject.GetComponent<Image>().sprite = page2;
             state = State.Compost;
         }
         else if (state == State.Compost)
         {
-            this.gameObject.GetComponent<Image>().sprite = page3;
             state = State.Recycling;
         }
         else if (state == State.Recycling)
         {
-            this.gameObject.GetComponent<Image>().sprite = page4;
             state = State.Trash;
         }
+        else if (state == State.Trash)
+        {
+            return;
+        }
+        gameManager.GetComponent<GameManager>().playsound("page");
+    }
+
+    public void TurnPageBack()
+    {
+        if (state == State.Intro)
+        {
+            return;
+        }
+        else if (state == State.Compost)
+        {
+            state = State.Intro;
+        }
+        else if (state == State.Recycling)
+        {
+            state = State.Compost;
+        }
+        else if (state == State.Trash)
+        {
+            state = State.Recycling;
+        }
+        gameManager.GetComponent<GameManager>().playsound("page");
     }
 
     public void JumpToPage(string s)
     {
         if (s == "Compost")
         {
-            this.gameObject.GetComponent<Image>().sprite = page2;
             state = State.Compost;
         }
         else if (s == "Recycling")
         {
-            this.gameObject.GetComponent<Image>().sprite = page3;
             state = State.Recycling;
         }
         else if (s == "Trash")
         {
-            this.gameObject.GetComponent<Image>().sprite = page4;
             state = State.Trash;
+        }
+        gameManager.GetComponent<GameManager>().playsound("page");
+    }
+
+    public void swipeRight()
+    {
+        TurnPageBack();
+    }
+
+    public void swipeLeft()
+    {
+        TurnPage();
+    }
+
+    public void open(string name)
+    {
+        if (name == "compost")
+        {
+            Application.OpenURL("http://livinggreen.ifas.ufl.edu/waste/composting.html");
+        }
+        if (name == "trash")
+        {
+            Application.OpenURL("https://www.scientificamerican.com/article/where-does-your-garbage-go/");
+        }
+        else if (name == "recycle")
+        {
+            Application.OpenURL("https://earth911.com/recycling-guide/how-to-recycle-tin-or-steel-cans/");
         }
     }
 }
