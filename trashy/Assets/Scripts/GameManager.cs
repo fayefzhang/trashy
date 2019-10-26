@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject sort;
     [SerializeField] GameObject score;
     [SerializeField] GameObject guide;
+    [SerializeField] GameObject map;
 
     [Header("Cutscenes")]
     [SerializeField] GameObject cutsceneChar;
@@ -144,6 +145,20 @@ public class GameManager : MonoBehaviour
             musicource.clip = bgmainclip;
             if (!musicource.isPlaying)
                 musicource.Play();
+        }
+        else if (btn == "Back3")
+        {
+            map.SetActive(false);
+            playsound("button");
+        }
+        else if (btn == "Map")
+        {
+            map.SetActive(true);
+            playsound("button");
+        }
+        else if (btn == "Map2")
+        {
+            Application.OpenURL("https://www.google.com/maps/search/Recycling+Centers+Near+Me");
         }
         else if (btn == "CBOI")
         {
