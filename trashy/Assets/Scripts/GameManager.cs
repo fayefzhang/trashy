@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject score;
     [SerializeField] GameObject guide;
     [SerializeField] GameObject map;
+    [SerializeField] GameObject help;
 
     [Header("Cutscenes")]
     [SerializeField] GameObject cutsceneChar;
@@ -151,6 +152,11 @@ public class GameManager : MonoBehaviour
             map.SetActive(false);
             playsound("button");
         }
+        else if (btn == "Back4")
+        {
+            help.SetActive(false);
+            playsound("button");
+        }
         else if (btn == "Map")
         {
             map.SetActive(true);
@@ -159,6 +165,11 @@ public class GameManager : MonoBehaviour
         else if (btn == "Map2")
         {
             Application.OpenURL("https://www.google.com/maps/search/Recycling+Centers+Near+Me");
+        }
+        else if (btn == "Help")
+        {
+            help.SetActive(true);
+            playsound("button");
         }
         else if (btn == "CBOI")
         {
