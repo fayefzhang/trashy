@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f834903afc73df7478b5323f24ba4f7e, type: 3}
+  m_Name: Can
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: a2183ae0efa177243b15076288297afa, type: 3}
+  prefab: {fileID: 3152774633493412743, guid: a33fdc0855b2aa24fb16c9170cff1b5b, type: 3}
+  item: Can
+  info: drink it, toss it (into the recycling bin of course!)
+  type: Recycling

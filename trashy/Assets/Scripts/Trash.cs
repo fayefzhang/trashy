@@ -15,7 +15,18 @@ public class Trash : MonoBehaviour
     [Header("Items")]
     public Item trash1;
     public Item trash2;
+    public Item trash3;
+    public Item trash4;
     public Item rec1;
+    public Item rec2;
+    public Item rec3;
+    public Item rec4;
+    public Item rec5;
+    public Item comp1;
+    public Item comp2;
+    public Item comp3;
+    public Item comp4;
+    public Item comp5;
 
     [Header("Trash Cans")]
     //(left swipes) recycle > trash > compost > recycle
@@ -36,7 +47,7 @@ public class Trash : MonoBehaviour
     [SerializeField] GameObject strike2;
     [SerializeField] GameObject strike3;
 
-    private Item[] items = new Item[3];
+    private Item[] items = new Item[14];
 
     //state machine ajdl;kasjfk
     private enum State
@@ -81,7 +92,18 @@ public class Trash : MonoBehaviour
         //assigning variables into items[]
         items[0] = trash1;
         items[1] = trash2;
-        items[2] = rec1;
+        items[2] = trash3;
+        items[3] = trash4;
+        items[4] = rec1;
+        items[5] = rec2;
+        items[6] = rec3;
+        items[7] = rec4;
+        items[8] = rec5;
+        items[9] = comp1;
+        items[10] = comp2;
+        items[11] = comp3;
+        items[12] = comp4;
+        items[13] = comp5;
 
         ptrashstate = TrashState.Trash; //setting ptrashstate as trash (when starting)
         trashstate = TrashState.Trash;
