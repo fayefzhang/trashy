@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject guide;
     [SerializeField] GameObject map;
     [SerializeField] GameObject help;
+    [SerializeField] GameObject robot;
 
     [Header("Cutscenes")]
     [SerializeField] GameObject cutsceneChar;
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text cutsceneTap2Continue;
     [SerializeField] GameObject cutsceneBg;
     [SerializeField] GameObject touch;
+    [SerializeField] GameObject touch2;
 
     [Header("Main")]
     [SerializeField] GameObject mainBg;
@@ -31,6 +34,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject mapSilh;
     [SerializeField] GameObject CBOISilh;
     [SerializeField] GameObject TrashSilh;
+    [SerializeField] GameObject Stars;
+    [SerializeField] GameObject HelpBtn;
 
     [Header("Music")]
     [SerializeField] AudioSource musicource;
@@ -48,6 +53,7 @@ public class GameManager : MonoBehaviour
 
     private bool tapped = false;
     private string btn = "";
+    private int intro = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -58,6 +64,9 @@ public class GameManager : MonoBehaviour
         sort.SetActive(false);
         score.SetActive(false);
         guide.SetActive(false);
+        map.SetActive(false);
+        help.SetActive(false);
+        robot.SetActive(false);
 
         if (!debugSkip)
         {
@@ -96,13 +105,33 @@ public class GameManager : MonoBehaviour
             musicource.Play();
         }
 
+        PlayerPrefs.SetInt("stars", 121);
         //StartCoroutine(introduction());
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (PlayerPrefs.GetInt("stars", 0) / 10 < 10)
+        {
+            Stars.GetComponent<TextMeshProUGUI>().text = "0000" + PlayerPrefs.GetInt("stars", 0);
+        }
+        else if (PlayerPrefs.GetInt("stars", 0) / 100 < 10)
+        {
+            Stars.GetComponent<TextMeshProUGUI>().text = "000" + PlayerPrefs.GetInt("stars", 0);
+        }
+        else if (PlayerPrefs.GetInt("stars", 0) / 1000 < 10)
+        {
+            Stars.GetComponent<TextMeshProUGUI>().text = "00" + PlayerPrefs.GetInt("stars", 0);
+        }
+        else if (PlayerPrefs.GetInt("stars", 0) / 10000 < 10)
+        {
+            Stars.GetComponent<TextMeshProUGUI>().text = "0" + PlayerPrefs.GetInt("stars", 0);
+        }
+        else
+        {
+            Stars.GetComponent<TextMeshProUGUI>().text = "" + PlayerPrefs.GetInt("stars", 0);
+        }
     }
 
     public void tap()
@@ -116,9 +145,21 @@ public class GameManager : MonoBehaviour
 
         if (btn == "Trash")
         {
+            if (intro == 4)
+            {
+                StartCoroutine(trashIntro());
+            }
+            else if (intro == 1 || intro == 2 || intro == 3)
+            {
+                return;
+            }
+            else
+            {
+                gameObject.GetComponent<Trash>().restart();
+            }
+
             cutscene.SetActive(false);
             main.SetActive(false);
-            gameObject.GetComponent<Trash>().restart();
             sort.SetActive(true);
             playsound("button");
 
@@ -128,6 +169,10 @@ public class GameManager : MonoBehaviour
         }
         else if (btn == "Guide")
         {
+            if (intro == 2 || intro == 3 || intro == 4)
+            {
+                return;
+            }
             guide.SetActive(true);
             playsound("button");
         }
@@ -143,6 +188,8 @@ public class GameManager : MonoBehaviour
             score.SetActive(false);
             cutscene.SetActive(true);
 
+            intro = 5;
+
             musicource.clip = bgmainclip;
             if (!musicource.isPlaying)
                 musicource.Play();
@@ -157,8 +204,17 @@ public class GameManager : MonoBehaviour
             help.SetActive(false);
             playsound("button");
         }
+        else if (btn == "Back5")
+        {
+            robot.SetActive(false);
+            playsound("button");
+        }
         else if (btn == "Map")
         {
+            if (intro == 1 || intro == 3 || intro == 4)
+            {
+                return;
+            }
             map.SetActive(true);
             playsound("button");
         }
@@ -173,7 +229,28 @@ public class GameManager : MonoBehaviour
         }
         else if (btn == "CBOI")
         {
-            //make sure this doesnt work during the start of the game (or not idk maybe it'd be nice who knowssssssss)
+            if (intro == 1 || intro == 2 || intro == 4)
+            {
+                return;
+            }
+            robot.SetActive(true);
+            playsound("button");
+        }
+        else if (btn == "MusicOn")
+        {
+            musicource.mute = false;
+        }
+        else if (btn == "MusicOff")
+        {
+            musicource.mute = true;
+        }
+        else if (btn == "SoundOn")
+        {
+            sfxsource.mute = false;
+        }
+        else if (btn == "SoundOff")
+        {
+            sfxsource.mute = true;
         }
     }
 
@@ -219,9 +296,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void tutorial()
+    {
+        musicource.clip = bgmainclip;
+        if (!musicource.isPlaying)
+        {
+            musicource.Play();
+        }
+
+        StartCoroutine(introduction());
+    }
+
     IEnumerator introduction()
     {
+        cutscene.SetActive(false);
+        main.SetActive(false);
+        sort.SetActive(false);
+        score.SetActive(false);
+        guide.SetActive(false);
+        map.SetActive(false);
+        help.SetActive(false);
+        robot.SetActive(false);
+
+        intro = 1;
         float buffer = 0f;
+
+        robot.SetActive(false);
 
         cutscene.SetActive(true);
         cutsceneChar.SetActive(false);
@@ -274,6 +374,7 @@ public class GameManager : MonoBehaviour
         cutsceneDialogue.GetComponent<UITextTypeWriter>().stop();
         cutsceneDialogue.text = "bzzt- bzzt- hello?";
 
+        cutsceneTap2Continue.gameObject.SetActive(true);
         cutsceneTap2Continue.enabled = true;
         cutsceneTap2Continue.GetComponent<Text>().color = new Color(1f, 1f, 1f, 0f);
 
@@ -291,6 +392,7 @@ public class GameManager : MonoBehaviour
         }
 
         cutsceneChar.SetActive(true);
+        cutsceneChar.transform.position = new Vector3(188.5f, 285f, 0f);
         cutsceneChar.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
 
         //fade-in char
@@ -364,6 +466,8 @@ public class GameManager : MonoBehaviour
         }
 
         main.SetActive(true);
+        HelpBtn.SetActive(false);
+        Stars.SetActive(false);
 
         while (cutsceneBg.GetComponent<SpriteRenderer>().color.a > 0f)
         {
@@ -392,6 +496,9 @@ public class GameManager : MonoBehaviour
         cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
         CBOISilh.GetComponent<SpriteRenderer>().flipX = true;
         CBOISilh.transform.position = new Vector3(135.67f, CBOISilh.transform.position.y, CBOISilh.transform.position.z);
+
+        Stars.SetActive(true);
+        HelpBtn.SetActive(true);
 
         yield return new WaitForSeconds(0.2f);
 
@@ -456,6 +563,7 @@ public class GameManager : MonoBehaviour
         positive = false;
         timer = 0f;
         btn = "";
+        intro = 2;
         while (!(btn == "Map"))
         {
             timer += Time.deltaTime;
@@ -500,6 +608,7 @@ public class GameManager : MonoBehaviour
 
         positive = false;
         btn = "";
+        intro = 3;
         while (!(btn == "CBOI"))
         {
             timer += Time.deltaTime;
@@ -545,6 +654,7 @@ public class GameManager : MonoBehaviour
         positive = false;
         timer = 0f;
         btn = "";
+        intro = 4;
         while (!(btn == "Trash"))
         {
             timer += Time.deltaTime;
@@ -592,6 +702,33 @@ public class GameManager : MonoBehaviour
         tapped = false;
         btn = "";
 
+        yield return null;
+    }
+
+    IEnumerator trashIntro()
+    {
+        touch2.SetActive(true);
+        touch2.transform.position = new Vector3(60f, 50f, 0f);
+        touch2.GetComponent<Animator>().SetInteger("motion", 0);
+        yield return new WaitForSeconds(2f);
+
+        touch2.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+
+        touch2.SetActive(true);
+        touch2.GetComponent<Animator>().SetInteger("motion", 1);
+        yield return new WaitForSeconds(1.5f);
+        touch2.GetComponent<Animator>().SetInteger("motion", 2);
+        yield return new WaitForSeconds(1.5f);
+        touch2.GetComponent<Animator>().SetInteger("motion", 1);
+        yield return new WaitForSeconds(1.5f);
+        touch2.GetComponent<Animator>().SetInteger("motion", 2);
+        yield return new WaitForSeconds(1.5f);
+
+        touch2.SetActive(false);
+        yield return new WaitForSeconds(1f);
+
+        gameObject.GetComponent<Trash>().restart();
         yield return null;
     }
 }

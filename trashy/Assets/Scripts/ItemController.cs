@@ -5,7 +5,7 @@ using UnityEngine;
 public class ItemController : MonoBehaviour
 {
     public Item info;
-    [SerializeField] float gravity = 3f;
+    float gravity = 15f;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +17,11 @@ public class ItemController : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void setGravity(float gravity)
+    {
+        this.gravity = gravity;
     }
 
     IEnumerator fall() //edgy falling gravity thing

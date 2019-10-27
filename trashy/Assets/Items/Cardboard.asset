@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f834903afc73df7478b5323f24ba4f7e, type: 3}
   m_Name: Cardboard
   m_EditorClassIdentifier: 
-  sprite: {fileID: 0}
-  prefab: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 1fa407bd4a0268f40bc30c70dd4d561e, type: 3}
+  prefab: {fileID: 2584494551055546915, guid: e70737fc155520b4c8d4a74743cf220c, type: 3}
   item: cardboard box
-  info: 
-  type: 
+  info: boxy box
+  type: Recycling

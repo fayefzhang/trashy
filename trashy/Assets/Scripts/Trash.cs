@@ -5,6 +5,14 @@ using UnityEngine.UI;
 
 public class Trash : MonoBehaviour
 {
+    float gravity = 15f;
+    int droplevel = 1;
+    int level = 1;
+    //1 = 4 basic items
+    //with every additional level, another item is added
+
+    [SerializeField]
+
     [Header("Game")]
     int score = 0;
     int good = 0;
@@ -48,6 +56,7 @@ public class Trash : MonoBehaviour
     [SerializeField] GameObject strike3;
 
     private Item[] items = new Item[14];
+    private bool[] used = new bool[14];
 
     //state machine ajdl;kasjfk
     private enum State
@@ -79,6 +88,27 @@ public class Trash : MonoBehaviour
         init();
     }
 
+    public int getLevel()
+    {
+        return level;
+    }
+
+    public void increaseLevel()
+    {
+        level++;
+    }
+
+    public int getDropLevel()
+    {
+        return droplevel;
+    }
+
+    public void editGravity(float f) //increases drop level too
+    {
+        gravity *= f;
+        droplevel++;
+    }
+
     void init()
     {
         state = State.Sorting;
@@ -88,6 +118,73 @@ public class Trash : MonoBehaviour
         score = 0;
         good = 0;
         bad = 0;
+
+        //level == 1 (setup)
+        used[0] = false;
+        used[1] = true;
+        used[2] = true;
+        used[3] = false;
+        used[4] = false;
+        used[5] = true;
+        used[6] = false;
+        used[7] = false;
+        used[8] = false;
+        used[9] = false;
+        used[10] = true;
+        used[11] = false;
+        used[12] = false;
+        used[13] = false;
+
+        if (level >= 2)
+        {
+            //cardboard
+            used[6] = true;
+        }
+        else if (level >= 3)
+        {
+            //apple core
+            used[9] = true;
+        }
+        else if (level >= 4)
+        {
+            //crumpled paper
+            used[3] = true;
+        }
+        else if (level >= 5)
+        {
+            //papers
+            used[4] = true;
+        }
+        else if (level >= 6)
+        {
+            //flower
+            used[11] = true;
+        }
+        else if (level >= 7)
+        {
+            //teabag
+            used[12] = true;
+        }
+        else if (level >= 8)
+        {
+            //pizza
+            used[0] = true;
+        }
+        else if (level >= 9)
+        {
+            //mail
+            used[7] = true;
+        }
+        else if (level >= 10)
+        {
+            //xigua
+            used[13] = true;
+        }
+        else if (level >= 11)
+        {
+            //wrapping paper
+            used[8] = true;
+        }
 
         //assigning variables into items[]
         items[0] = trash1;
@@ -104,6 +201,11 @@ public class Trash : MonoBehaviour
         items[11] = comp3;
         items[12] = comp4;
         items[13] = comp5;
+
+        for (int i = 0; i < 14; i++)
+        {
+            items[i].prefab.GetComponent<ItemController>().setGravity(this.gravity);
+        }
 
         ptrashstate = TrashState.Trash; //setting ptrashstate as trash (when starting)
         trashstate = TrashState.Trash;
@@ -205,13 +307,18 @@ public class Trash : MonoBehaviour
     {
         GameObject em = Instantiate(obj, new Vector3(Random.Range(155f, 168f), 600f, 0f), Quaternion.identity);
     }
+
     IEnumerator SpawnTrash()
     {
         while (state == State.Sorting)
         {
             float rand = Random.Range(spacermin, spacermax); //space between items
-            int randomInt = Random.Range(0, 3); //random item to spawn
-
+            int randomInt = Random.Range(0, 14); //random item to spawn
+            
+            while (!used[randomInt])
+            {
+                randomInt = Random.Range(0, 14);
+            }
             SpawnPrefab(items[randomInt].prefab); //spawns that item
 
             yield return new WaitForSeconds(rand); //repeats
@@ -225,8 +332,7 @@ public class Trash : MonoBehaviour
         {
             state = State.Ended;
             StopCoroutine(SpawnTrash());
-            PlayerPrefs.SetInt("game", PlayerPrefs.GetInt("game", 0) + score);
-            print(PlayerPrefs.GetInt("game", 0) + score);
+            PlayerPrefs.SetInt("stars", PlayerPrefs.GetInt("stars", 0) + ((score / 10) + 1));
             gameObject.GetComponent<GameManager>().startScore();
         }
     }
@@ -268,15 +374,8 @@ public class Trash : MonoBehaviour
         {
             if (strike2.GetComponent<Strike>().getState())
             {
-                if (strike3.GetComponent<Strike>().getState())
-                {
-                    if (state == State.Sorting)
-                        endGame();
-                }
-                else
-                {
-                    strike3.GetComponent<Strike>().toggle();
-                }
+                if (state == State.Sorting)
+                    endGame();
             }
             else
             {
