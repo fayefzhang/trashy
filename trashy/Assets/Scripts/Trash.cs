@@ -96,6 +96,7 @@ public class Trash : MonoBehaviour
     public void increaseLevel()
     {
         level++;
+        print(level);
     }
 
     public int getDropLevel()
@@ -135,52 +136,53 @@ public class Trash : MonoBehaviour
         used[12] = false;
         used[13] = false;
 
+        print(level);
         if (level >= 2)
         {
             //cardboard
             used[6] = true;
         }
-        else if (level >= 3)
+        if (level >= 3)
         {
             //apple core
             used[9] = true;
         }
-        else if (level >= 4)
+        if (level >= 4)
         {
             //crumpled paper
             used[3] = true;
         }
-        else if (level >= 5)
+        if (level >= 5)
         {
             //papers
             used[4] = true;
         }
-        else if (level >= 6)
+        if (level >= 6)
         {
             //flower
             used[11] = true;
         }
-        else if (level >= 7)
+        if (level >= 7)
         {
             //teabag
             used[12] = true;
         }
-        else if (level >= 8)
+        if (level >= 8)
         {
             //pizza
             used[0] = true;
         }
-        else if (level >= 9)
+        if (level >= 9)
         {
             //mail
             used[7] = true;
         }
-        else if (level >= 10)
+        if (level >= 10)
         {
             //xigua
             used[13] = true;
         }
-        else if (level >= 11)
+        if (level >= 11)
         {
             //wrapping paper
             used[8] = true;
@@ -314,7 +316,7 @@ public class Trash : MonoBehaviour
         {
             float rand = Random.Range(spacermin, spacermax); //space between items
             int randomInt = Random.Range(0, 14); //random item to spawn
-            
+
             while (!used[randomInt])
             {
                 randomInt = Random.Range(0, 14);

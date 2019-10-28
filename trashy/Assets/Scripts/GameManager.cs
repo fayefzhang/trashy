@@ -6,8 +6,6 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public bool debugSkip = true;
-
     [Header("Game Sections")]
     [SerializeField] GameObject cutscene;
     [SerializeField] GameObject main;
@@ -68,35 +66,21 @@ public class GameManager : MonoBehaviour
         help.SetActive(false);
         robot.SetActive(false);
 
-        if (!debugSkip)
+        if (PlayerPrefs.GetInt("hasPlayed", 0) == 1)
         {
-            if (PlayerPrefs.GetInt("hasPlayed") == 1)
-            {
-                main.SetActive(true);
-                cutscene.SetActive(true);
-                cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
-                cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
-                cutsceneChar.transform.position = new Vector3(130.67f, 140.2f, 0f);
-            }
-            else
-            {
-                PlayerPrefs.SetInt("hasPlayed", 1);
-
-                StartCoroutine(introduction());
-
-                musicource.clip = bgmainclip;
-                if (!musicource.isPlaying)
-                {
-                    musicource.Play();
-                }
-            }
+            main.SetActive(true);
+            cutscene.SetActive(true);
+            cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
+            cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
+            cutsceneChar.transform.position = new Vector3(130.67f, 140.2f, 0f);
         }
+        else
+        {
+            PlayerPrefs.SetInt("hasPlayed", 1);
 
-        main.SetActive(true);
-        cutscene.SetActive(true);
-        cutsceneChar.GetComponent<SpriteRenderer>().flipX = true;
-        cutsceneChar.transform.localScale = new Vector3(10.95f, 10.95f, 0f);
-        cutsceneChar.transform.position = new Vector3(130.67f, 140.2f, 0f);
+            StartCoroutine(introduction());
+            PlayerPrefs.SetInt("stars", 100);
+        }
 
         //AUDIO
         musicource.clip = bgmainclip;
@@ -104,9 +88,6 @@ public class GameManager : MonoBehaviour
         {
             musicource.Play();
         }
-
-        PlayerPrefs.SetInt("stars", 121);
-        //StartCoroutine(introduction());
     }
 
     // Update is called once per frame
