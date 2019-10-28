@@ -279,13 +279,16 @@ public class GameManager : MonoBehaviour
 
     public void tutorial()
     {
-        musicource.clip = bgmainclip;
-        if (!musicource.isPlaying)
+        if (intro == 0)
         {
-            musicource.Play();
-        }
+            musicource.clip = bgmainclip;
+            if (!musicource.isPlaying)
+            {
+                musicource.Play();
+            }
 
-        StartCoroutine(introduction());
+            StartCoroutine(introduction());
+        }
     }
 
     IEnumerator introduction()
@@ -709,6 +712,7 @@ public class GameManager : MonoBehaviour
         touch2.SetActive(false);
         yield return new WaitForSeconds(1f);
 
+        intro = 0;
         gameObject.GetComponent<Trash>().restart();
         yield return null;
     }

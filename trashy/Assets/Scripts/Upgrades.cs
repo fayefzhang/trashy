@@ -63,7 +63,7 @@ public class Upgrades : MonoBehaviour
         {
             lvlImage.GetComponent<Image>().sprite = crumpledpaper;
             lvlCost.GetComponent<TextMeshProUGUI>().text = "    40";
-            lvlName.GetComponent<TextMeshProUGUI>().text = "  Crumpled Paper";
+            lvlName.GetComponent<TextMeshProUGUI>().text = "    Crumpled Paper";
             lvlupgrade = 40;
         }
         else if (gameManager.GetComponent<Trash>().getLevel() == 4)
