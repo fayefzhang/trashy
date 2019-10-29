@@ -24,29 +24,61 @@ public class Robot : MonoBehaviour
     private bool MusicOn = true;
     private bool SoundOn = true;
 
+    private enum State
+    {
+        Intro, About, Settings, Upgrades
+    }
+
+    private State state;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        state = State.Intro;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (state == State.Intro)
+        {
+            intro.SetActive(true);
+            about.SetActive(false);
+            settings.SetActive(false);
+            upgrades.SetActive(false);
+        }
+        else if (state == State.About)
+        {
+            intro.SetActive(false);
+            about.SetActive(true);
+            settings.SetActive(false);
+            upgrades.SetActive(false);
+        }
+        else if (state == State.Settings)
+        {
+            intro.SetActive(false);
+            about.SetActive(false);
+            settings.SetActive(true);
+            upgrades.SetActive(false);
+        }
+        else if (state == State.Upgrades)
+        {
+            intro.SetActive(false);
+            about.SetActive(false);
+            settings.SetActive(false);
+            upgrades.SetActive(true);
+        }
     }
 
     public void btn(string name)
     {
         if (name == "About")
         {
-            intro.SetActive(false);
-            about.SetActive(true);
+            state = State.About;
         }
         else if (name == "Settings")
         {
-            intro.SetActive(false);
-            settings.SetActive(true);
+            state = State.Settings;
         }
         else if (name == "Tutorial")
         {
@@ -54,8 +86,7 @@ public class Robot : MonoBehaviour
         }
         else if (name == "Upgrades")
         {
-            intro.SetActive(false);
-            upgrades.SetActive(true);
+            state = State.Upgrades;
         }
         else if (name == "ToggleMusic")
         {
@@ -89,24 +120,21 @@ public class Robot : MonoBehaviour
         }
         else if (name == "Back")
         {
-            if (intro.activeSelf)
+            if (state == State.Intro)
             {
                 gameManager.GetComponent<GameManager>().button("Back5");
             }
-            else if (about.activeSelf)
+            else if (state == State.About)
             {
-                about.SetActive(false);
-                intro.SetActive(true);
+                state = State.Intro;
             }
-            else if (settings.activeSelf)
+            else if (state == State.Settings)
             {
-                intro.SetActive(true);
-                settings.SetActive(false);
+                state = State.Intro;
             }
-            else if (upgrades.activeSelf)
+            else if (state == State.Upgrades)
             {
-                intro.SetActive(true);
-                upgrades.SetActive(false);
+                state = State.Intro;
             }
         }
         gameManager.GetComponent<GameManager>().playsound("button");
