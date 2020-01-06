@@ -12,3 +12,4 @@ __Features__
 * Mobile Friendly!
 
 Enjoy!
+Copyright (C) 2019 Faye Zhang
