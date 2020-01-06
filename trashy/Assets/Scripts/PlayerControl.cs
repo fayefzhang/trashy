@@ -75,5 +75,9 @@ public class PlayerControl : MonoBehaviour
                 }
             }
         }
+        if (Input.GetMouseButtonDown(0))
+        {
+            gameObject.GetComponent<GameManager>().tap();
+        }
     }
 }
