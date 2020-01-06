@@ -1,7 +1,7 @@
 ![trashy](https://flufflaire.github.io/images/games/thumbnail.png)
 
 ## a game about sorting trash 🗑️
-### play it [here!](https://flufflaire.itch.io/cyclemore)
+### play it [here on itch.io!](https://flufflaire.itch.io/cyclemore)
 
 Includes reading of guides and a helpful link to find all recycling centers near you.
 
